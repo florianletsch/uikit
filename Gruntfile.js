@@ -136,7 +136,7 @@ module.exports = function(grunt) {
                 files: [{ expand: true, cwd: "src/less", src: ["*"], dest: "src/scss/", ext: '.scss' }]
             },
             scssthemes: {
-                files: [{ expand: true, src: "themes/**/*.less", ext: '.scss' }]
+                files: [{ expand: true, cwd: "themes/default/default", src: ["**.less"], dest: "themes/default/default-scss", ext: '.scss' }]
             }
         },
 
@@ -373,7 +373,7 @@ module.exports = function(grunt) {
 
     // Register grunt tasks
     grunt.registerTask("build", ["jshint", "indexthemes", "less", "concat", "copy", "uglify", "usebanner"]);
-    grunt.registerTask("build-scss", ["copy:scss", "copy:scssthemes", "replace:scss"]);
+    grunt.registerTask("make-scss", ["copy:scss", "copy:scssthemes", "replace:scss"]);
     grunt.registerTask("default", ["build", "compress"]);
 
 };

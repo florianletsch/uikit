@@ -47,6 +47,26 @@ Enter the following, so Grunt will watch your working directory and compile LESS
 grunt watch
 ```
 
+### For SCSS lovers
+
+If you want to work with SCSS instead of LESS, we've included a basic converter. Run
+the grunt task `make-scss` and you will have `/src/scss` filled with the SCSS files. Also, you
+will find a theme in `themes/default/default-scss` to get you started.
+
+```
+grunt make-scss
+``
+
+To kick off compiling SCSS simply compile `uikit.scss` included in the theme
+folder and drop the output in the dist folder. Depending on your preferred
+SCSS process you might want to run:
+
+```
+sass themes/default/default-scss/uikit.scss > dist/css/uikit.css
+sass themes/default/default-scss/uikit.scss --style compressed > dist/css/uikit.min.css
+```
+
+
 ## Versioning
 
 UIkit is maintained by using the [Semantic Versioning Specification (SemVer)](http://semver.org).
