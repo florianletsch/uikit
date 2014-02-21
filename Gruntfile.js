@@ -154,12 +154,14 @@ module.exports = function(grunt) {
                     from: '\.less', to: '\.scss'
                 }, { // replace '@' with '$'
                     from: '@', to: '$'
-                }, { // mixins
+                }, { // hook -> mixins
                     from: /\.([\w\-]*)\s*\((.*)\)\s*\{/g, to: '@mixin $1($2){'
+                }, { // hook calls
+                    from: /\.(hook[a-zA-Z\-\d]+);/g, to: '@include $1();'
                 }, { // includes
                     from: /\.([\w\-]*\(.*\)\s*;)/g, to: '@include $1'
                 }, { // replace valid '@' statements
-                    from: /\$(import|media|font-face)/g, to: '@$1'
+                    from: /\$(import|media|font-face|page|-ms-viewport|keyframes|-webkit-keyframes)/g, to: '@$1'
                 }, { // string literals
                     // from: /~"(.*)"/g, to: '#{"$1"}'
                     from: /\$\{/g, to: '#{'
