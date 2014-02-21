@@ -18,6 +18,14 @@
 @breadcrumb-disabled-color:                     #999;
 
 
+// Hooks
+// ========================================================================
+
+.hook-breadcrumb() {}
+.hook-breadcrumb-divider() {}
+.hook-breadcrumb-misc() {}
+
+
 /* ========================================================================
    Component: Breadcrumb
  ========================================================================== */
@@ -67,11 +75,7 @@
 .uk-breadcrumb > li:not(.uk-active) > span { color: @breadcrumb-disabled-color; }
 
 
-// Hooks
+// Hook
 // ========================================================================
 
 .hook-breadcrumb-misc;
-
-.hook-breadcrumb() {}
-.hook-breadcrumb-divider() {}
-.hook-breadcrumb-misc() {}

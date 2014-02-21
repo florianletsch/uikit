@@ -27,8 +27,8 @@
 
 @offcanvas-panel-margin:                        20px 15px;
 @offcanvas-panel-color:                         #777;
-@offcanvas-panel-title-color:                   @offcanvas-panel-link-color;
 @offcanvas-panel-link-color:                    #ccc;
+@offcanvas-panel-title-color:                   @offcanvas-panel-link-color;
 @offcanvas-panel-link-hover-color:              #fff;
 
 @offcanvas-search-margin:                       20px 15px;
@@ -37,6 +37,16 @@
 @offcanvas-search-color:                        @offcanvas-panel-link-color;
 @offcanvas-search-placeholder-color:            @offcanvas-panel-color;
 @offcanvas-search-icon-color:                   @offcanvas-panel-color;
+
+
+// Hooks
+// ========================================================================
+
+.hook-offcanvas() {}
+.hook-offcanvas-bar() {}
+.hook-offcanvas-panel() {}
+.hook-offcanvas-search-field() {}
+.hook-offcanvas-misc() {}
 
 
 /* ========================================================================
@@ -173,13 +183,7 @@
 .uk-offcanvas .uk-search-field::-webkit-input-placeholder { color: @offcanvas-search-placeholder-color; }
 
 
-// Hooks
+// Hook
 // ========================================================================
 
 .hook-offcanvas-misc;
-
-.hook-offcanvas() {}
-.hook-offcanvas-bar() {}
-.hook-offcanvas-panel() {}
-.hook-offcanvas-search-field() {}
-.hook-offcanvas-misc() {}
