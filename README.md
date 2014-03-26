@@ -55,7 +55,7 @@ will find a theme in `themes/default/default-scss` to get you started.
 
 ```
 grunt make-scss
-``
+```
 
 To kick off compiling SCSS simply compile `uikit.scss` included in the theme
 folder and drop the output in the dist folder. Depending on your preferred
