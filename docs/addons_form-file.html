@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Form file add-on - UIkit documentation</title>
+        <title>Form file component - UIkit documentation</title>
         <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
         <link id="data-uikit-theme" rel="stylesheet" href="css/uikit.docs.min.css">
@@ -14,8 +14,6 @@
         <script src="../dist/js/uikit.min.js"></script>
         <script src="../vendor/highlight/highlight.js"></script>
         <script src="js/docs.js"></script>
-        <script src="../dist/addons/js/form-file.js"></script>
-        <link rel="stylesheet" href="../dist/addons/css/form-file.css">
     </head>
 
     <body class="tm-background">
@@ -46,15 +44,23 @@
                     <div class="tm-sidebar uk-width-medium-1-4 uk-hidden-small">
 
                         <ul class="tm-nav uk-nav" data-uk-nav>
-                            <li class="uk-nav-header">Add-ons</li>
-                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
-                            <li><a href="addons_sortable.html">Sortable</a></li>
-                            <li><a href="addons_datepicker.html">Datepicker</a></li>
-                            <li><a href="addons_timepicker.html">Timepicker</a></li>
-                            <li><a href="addons_sticky.html">Sticky</a></li>
-                            <li><a href="addons_notify.html">Notify</a></li>
-                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li class="uk-nav-header">Navigations</li>
+                            <li><a href="addons_dotnav.html">Dotnav</a></li>
+                            <li><a href="addons_slidenav.html">Slidenav</a></li>
+                            <li class="uk-nav-header">Common</li>
                             <li class="uk-active"><a href="addons_form-file.html">Form file</a></li>
+                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li><a href="addons_placeholder.html">Placeholder</a></li>
+                            <li class="uk-nav-header">JavaScript</li>
+                            <li><a href="addons_autocomplete.html">Autocomplete</a></li>
+                            <li><a href="addons_datepicker.html">Datepicker</a></li>
+                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
+                            <li><a href="addons_notify.html">Notify</a></li>
+                            <li><a href="addons_search.html">Search</a></li>
+                            <li><a href="addons_sortable.html">Sortable</a></li>
+                            <li><a href="addons_sticky.html">Sticky</a></li>
+                            <li><a href="addons_timepicker.html">Timepicker</a></li>
+                            <li><a href="addons_upload.html">Upload</a></li>
                         </ul>
 
                     </div>
@@ -64,55 +70,33 @@
 
                             <h1>Form file</h1>
 
-                            <p class="uk-article-lead">Create a form control that lets the user select a file.</p>
+                            <p class="uk-article-lead">Replace the default file input with your own HTML content, like a button.</p>
 
                             <h2>Usage</h2>
 
-                            <p>To apply this add-on, just add the <code>.uk-form-file</code> class to a container element around a button and an <code>&lt;input type="file"&gt;</code> element. You can also use any other element instead of a button.</p>
+                            <p>To apply this component, just add the <code>.uk-form-file</code> class to a container element around a button and an <code>&lt;input type="file"&gt;</code> element. You can also use any other element instead of a button.</p>
 
                             <h3 class="tm-article-subtitle">Example</h3>
 
-                            <form class="uk-form">
+                            <div class="uk-margin">
+
                                 <div class="uk-form-file">
                                     <button class="uk-button">Select</button>
-                                    <input type="file">
+                                    <input id="form-file" type="file">
                                 </div>
-                            </form>
+
+                                You can also use
+                                <div class="uk-form-file uk-text-primary">text<input id="form-file" type="file"></div>.
+                            </div>
 
                             <h3 class="tm-article-subtitle">Markup</h3>
 
 <pre><code>&lt;div class="uk-form-file"&gt;
     &lt;button class="uk-button"&gt;...&lt;/button&gt;
     &lt;input type="file"&gt;
-&lt;/div&gt;</code></pre>
+&lt;/div&gt;
 
-                            <hr class="uk-article-divider">
-
-                            <h2>Display file name</h2>
-
-                            <p>If you want the name of the selected file to be displayed in an <code>&lt;input&gt;</code> element, just add the <code>data-uk-form-file</code> attribute to a container element.</p>
-
-                            <h3 class="tm-article-subtitle">Example</h3>
-
-                            <form class="uk-form" data-uk-form-file>
-                                <div class="uk-form-file">
-                                    <button class="uk-button">Select</button>
-                                    <input type="file">
-                                </div>
-                                <input type="text" disabled>
-                                <button class="uk-button uk-button-success">Upload</button>
-                            </form>
-
-                            <h3 class="tm-article-subtitle">Markup</h3>
-
-<pre><code>&lt;form class="uk-form" data-uk-form-file&gt;
-    &lt;div class="uk-form-file"&gt;
-        &lt;button class="uk-button"&gt;...&lt;/button&gt;
-        &lt;input type="file"&gt;
-    &lt;/div&gt;
-    &lt;input type="text" disabled&gt;
-    &lt;button class="uk-button"&gt;...&lt;/button&gt;
-&lt;/form&gt;</code></pre>
+&lt;div class="uk-form-file"&gt;Text&lt;input type="file"&gt;&lt;/div&gt;</code></pre>
 
                         </article>
 
@@ -156,6 +140,7 @@
                             <li><a href="documentation_create-a-theme.html">Create a theme</a></li>
                             <li><a href="documentation_create-a-style.html">Create a style</a></li>
                             <li><a href="documentation_customizer-json.html">Customizer.json</a></li>
+                            <li><a href="documentation_javascript.html">JavaScript</a></li>
                         </ul>
                     </li>
                     <li class="uk-nav-header">Components</li>
@@ -203,7 +188,6 @@
                             <li><a href="thumbnail.html">Thumbnail</a></li>
                             <li><a href="overlay.html">Overlay</a></li>
                             <li><a href="progress.html">Progress</a></li>
-                            <li><a href="search.html">Search</a></li>
                             <li><a href="text.html">Text</a></li>
                             <li><a href="animation.html">Animation</a></li>
                         </ul>
@@ -220,16 +204,31 @@
                             <li><a href="smooth-scroll.html">Smooth scroll</a></li>
                         </ul>
                     </li>
-                    <li class="uk-parent uk-active"><a href="#">Add-ons</a>
+                    <li class="uk-nav-header">Add-ons</li>
+                    <li class="uk-parent"><a href="#"><i class="uk-icon-bars"></i> Navigations</a>
                         <ul class="uk-nav-sub">
-                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
-                            <li><a href="addons_sortable.html">Sortable</a></li>
-                            <li><a href="addons_datepicker.html">Datepicker</a></li>
-                            <li><a href="addons_timepicker.html">Timepicker</a></li>
-                            <li><a href="addons_sticky.html">Sticky</a></li>
-                            <li><a href="addons_notify.html">Notify</a></li>
-                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li><a href="addons_dotnav.html">Dotnav</a></li>
+                            <li><a href="addons_slidenav.html">Slidenav</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent uk-active"><a href="#"><i class="uk-icon-folder-open"></i> Common</a>
+                        <ul class="uk-nav-sub">
                             <li><a href="addons_form-file.html">Form file</a></li>
+                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li><a href="addons_placeholder.html">Placeholder</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent"><a href="#"><i class="uk-icon-magic"></i> JavaScript</a>
+                        <ul class="uk-nav-sub">
+                            <li><a href="addons_autocomplete.html">Autocomplete</a></li>
+                            <li><a href="addons_datepicker.html">Datepicker</a></li>
+                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
+                            <li><a href="addons_notify.html">Notify</a></li>
+                            <li><a href="addons_search.html">Search</a></li>
+                            <li><a href="addons_sortable.html">Sortable</a></li>
+                            <li><a href="addons_sticky.html">Sticky</a></li>
+                            <li><a href="addons_timepicker.html">Timepicker</a></li>
+                            <li><a href="addons_upload.html">Upload</a></li>
                         </ul>
                     </li>
                 </ul>

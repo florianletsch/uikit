@@ -36,6 +36,8 @@ module.exports = function(grunt) {
 
             ["default", "custom"].forEach(function(f){
 
+                if(grunt.option('quick') && f=="custom") return;
+
                 if(fs.existsSync('themes/'+f)) {
 
                     fs.readdirSync('themes/'+f).forEach(function(t){
@@ -80,45 +82,18 @@ module.exports = function(grunt) {
 
             //addons
 
-            fs.readdirSync('addons/src').forEach(function(f){
+            themes.forEach(function(theme){
 
-                var addon = 'addons/src/'+f+'/'+f+'.less';
+                if(fs.existsSync(theme.path+'/uikit-addons.less')) {
 
-                if(fs.existsSync(addon)) {
+                    var name = (theme.dir == 'default' && theme.name == 'default') ? 'uikit.addons' : 'uikit.'+theme.name+'.addons',
+                        dest = (theme.dir == 'default') ? 'dist/css/addons' : theme.path+'/dist/addons';
 
-                  lessconf["addon-"+f] = {options: { paths: ['addons/src/'+f] }, files: {} };
-                  lessconf["addon-"+f].files["dist/addons/css/"+f+".css"] = [addon];
+                    lessconf["addons-"+theme.name] = {options: { paths: ['src/less/addons'] }, files: {} };
+                    lessconf["addons-"+theme.name].files[dest+"/"+name+".css"] = [theme.path+'/uikit-addons.less'];
 
-                  lessconf["addon-min-"+f] = {options: { paths: ['addons/src/'+f], cleancss: true }, files: {} };
-                  lessconf["addon-min-"+f].files["dist/addons/css/"+f+".min.css"] = [addon];
-
-                  // look for theme overrides
-                  themes.forEach(function(theme){
-
-                     var override = theme.path+'/addon.'+f+'.less',
-                         distpath = theme.dir=="default" ? "dist/addons/css" : theme.path+"/dist/addons";;
-
-                     if(fs.existsSync(override)) {
-
-                       if(theme.dir=="default" && theme.name=="default") {
-
-                         lessconf["addon-"+f+"-"+theme.name] = {options: { paths: [theme.path] }, files: {} };
-                         lessconf["addon-"+f+"-"+theme.name].files[distpath+"/"+f+".css"] = [override];
-
-                         lessconf["addon-min-"+f+"-"+theme.name] = {options: { paths: [theme.path], cleancss: true }, files: {} };
-                         lessconf["addon-min-"+f+"-"+theme.name].files[distpath+"/"+f+".min.css"] = [override];
-
-                       } else {
-
-                          lessconf["addon-"+f+"-"+theme.name] = {options: { paths: [theme.path] }, files: {} };
-                          lessconf["addon-"+f+"-"+theme.name].files[distpath+"/"+f+"."+theme.name+".css"] = [override];
-
-                          lessconf["addon-min-"+f+"-"+theme.name] = {options: { paths: [theme.path], cleancss: true }, files: {} };
-                          lessconf["addon-min-"+f+"-"+theme.name].files[distpath+"/"+f+"."+theme.name+".min.css"] = [override];
-
-                       }
-                     }
-                  });
+                    lessconf["addons-min-"+theme.name] = {options: { paths: ['src/less/addons'], cleancss: true }, files: {} };
+                    lessconf["addons-min-"+theme.name].files[dest+"/"+name+".min.css"] = [theme.path+'/uikit-addons.less'];
                 }
             });
 
@@ -174,37 +149,37 @@ module.exports = function(grunt) {
                 options: {
                     separator: "\n\n"
                 },
-                src: ["src/js/core.js",
-                      "src/js/utility.js",
-                      "src/js/touch.js",
-                      "src/js/alert.js",
-                      "src/js/button.js",
-                      "src/js/dropdown.js",
-                      "src/js/grid.js",
-                      "src/js/modal.js",
-                      "src/js/offcanvas.js",
-                      "src/js/nav.js",
-                      "src/js/tooltip.js",
-                      "src/js/switcher.js",
-                      "src/js/tab.js",
-                      "src/js/search.js",
-                      "src/js/scrollspy.js",
-                      "src/js/smooth-scroll.js",
-                      "src/js/toggle.js",
-                      ],
+                src: [
+                    "src/js/core.js",
+                    "src/js/utility.js",
+                    "src/js/touch.js",
+                    "src/js/alert.js",
+                    "src/js/button.js",
+                    "src/js/dropdown.js",
+                    "src/js/grid.js",
+                    "src/js/modal.js",
+                    "src/js/offcanvas.js",
+                    "src/js/nav.js",
+                    "src/js/tooltip.js",
+                    "src/js/switcher.js",
+                    "src/js/tab.js",
+                    "src/js/scrollspy.js",
+                    "src/js/smooth-scroll.js",
+                    "src/js/toggle.js",
+                ],
                 dest: "dist/js/uikit.js"
             }
         },
 
         usebanner: {
             dist: {
-              options: {
-                position: 'top',
-                banner: "<%= meta.banner %>\n"
-              },
-              files: {
-                src: [ 'dist/css/*.css', 'dist/js/*.js', 'dist/addons/css/*.css', 'dist/addons/js/*.js' ]
-              }
+                options: {
+                    position: 'top',
+                    banner: "<%= meta.banner %>\n"
+                },
+                files: {
+                    src: [ 'dist/css/**/*.css', 'dist/js/**/*.js' ]
+                }
             }
         },
 
@@ -218,21 +193,25 @@ module.exports = function(grunt) {
                 }
             },
             addonsmin: {
-              files: (function(){
+                files: (function(){
 
-                  var files = {};
+                    var files = {};
 
-                  fs.readdirSync('addons/src').forEach(function(f){
+                    fs.readdirSync('src/js/addons').forEach(function(f){
 
-                      var addon = 'addons/src/'+f+'/'+f+'.js';
+                        if(f.match(/\.js/)) {
 
-                      if(fs.existsSync(addon)) {
-                        files['dist/addons/js/'+f+'.min.js'] = [addon];
-                      }
-                  });
+                            var addon = f.replace(".js", "");
 
-                  return files;
-              })()
+                            grunt.file.copy('src/js/addons/'+f, 'dist/js/addons/'+addon+'.js');
+
+                            files['dist/js/addons/'+addon+'.min.js'] = ['src/js/addons/'+f];
+
+                        }
+                    });
+
+                    return files;
+                })()
             }
         },
 
@@ -242,7 +221,7 @@ module.exports = function(grunt) {
                     archive: ("dist/uikit-"+pkginfo.version+".zip")
                 },
                 files: [
-                    { expand: true, cwd: "dist/", src: ["css/*", "js/*", "fonts/*", "addons/css/*", "addons/js/*"], dest: "" }
+                    { expand: true, cwd: "dist/", src: ["css/**/*", "js/**/*", "fonts/*"], dest: "" }
                 ]
             }
         },
@@ -258,9 +237,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('indexthemes', 'Rebuilding theme index.', function() {
 
-       var themes = [];
+        var themes = [];
 
-       ["default", "custom"].forEach(function(f){
+        ["default", "custom"].forEach(function(f){
 
            if(fs.existsSync('themes/'+f)) {
 
@@ -271,30 +250,30 @@ module.exports = function(grunt) {
                    // Is it a directory?
                    if (fs.lstatSync(themepath).isDirectory() && t!=="blank" && t!=='.git') {
 
-                       var theme = {
-                           "name"  : t.split("-").join(" ").replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function ($1) { return $1.toUpperCase(); }),
-                           "url"   : "../"+themepath+"/uikit.less",
-                           "config": (fs.existsSync(themepath+"/customizer.json") ? "../"+themepath+"/customizer.json" : "../themes/default/uikit/customizer.json"),
-                           "styles": {}
-                       };
+                        var theme = {
+                            "name"  : t.split("-").join(" ").replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function ($1) { return $1.toUpperCase(); }),
+                            "url"   : "../"+themepath+"/uikit.less",
+                            "config": (fs.existsSync(themepath+"/customizer.json") ? "../"+themepath+"/customizer.json" : "../themes/default/uikit/customizer.json"),
+                            "styles": {}
+                        };
 
-                       if(fs.existsSync(themepath+'/styles')) {
+                        if(fs.existsSync(themepath+'/styles')) {
 
-                          var styles = {};
+                            var styles = {};
 
-                          fs.readdirSync(themepath+'/styles').forEach(function(sf){
+                            fs.readdirSync(themepath+'/styles').forEach(function(sf){
 
-                              var stylepath = [themepath, 'styles', sf, 'style.less'].join('/');
+                                var stylepath = [themepath, 'styles', sf, 'style.less'].join('/');
 
-                              if(fs.existsSync(stylepath)) {
-                                styles[sf] = "../"+themepath+"/styles/"+sf+"/style.less";
-                              }
-                          });
+                                if(fs.existsSync(stylepath)) {
+                                    styles[sf] = "../"+themepath+"/styles/"+sf+"/style.less";
+                                }
+                            });
 
-                          theme.styles = styles;
-                       }
+                            theme.styles = styles;
+                        }
 
-                       themes.push(theme);
+                        themes.push(theme);
                    }
                });
            }
@@ -306,58 +285,94 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('sublime', 'Building Sublime Text Package', function() {
-      var filepath = 'dist/css/uikit.css';
-      if (!fs.existsSync(filepath)) {
-        grunt.log.error("Not found: " + filepath);
-        return;
-      }
-      var cssContent   = grunt.file.read(filepath),
-          classesList = cssContent.match(/\.(uk-[a-z\d\-]+)/g),
-          classesSet  = {},
-          pystring    = '# copy & paste into sublime plugin code:\n';
+        // generates a python list (returns string representation)
+        var pythonList = function(classes) {
 
-      // use object as set (no duplicates)
-      classesList.forEach(function(c) {
-        c = c.substr(1); // remove leading dot
-        classesSet[c] = true;
-      });
+            var result = [];
 
-      // convert set back to list
-      /*
-      classesList = [];
-      for( var c in classesSet ) {
-          if (classesSet.hasOwnProperty(c)){
-             classesList.push(c);
-          }
-      }
-      */
-      classesList = Object.keys(classesSet);
+            classes.forEach(function(cls) {
+                // wrap class name in double quotes, add comma (except for last element)
+                result.push(['"', cls, '"', (i !== classes.length-1 ? ", " : "")].join(''));
 
-      pystring += 'uikit_classes = ["' + classesList.join('", "') + '"]\n';
+                // break lines every n elements
+                if ((i !== 0) && (i%20 === 0)) {
+                    result.push("\n    ");
+                }
+            });
 
-      filepath = 'dist/js/uikit.js';
-      if (!fs.existsSync(filepath)) {
-        grunt.log.error("Not found: " + filepath);
-        return;
-      }
-      var jsContent = grunt.file.read(filepath),
-        dataList    = jsContent.match(/data-uk-[a-z\d\-]+/g),
-        dataSet     = {};
+            return "[" + result.join("") + "]";
+        };
 
-      dataList.forEach(function(s) { dataSet[s] = true; });
-      /*
-      dataList = [];
-      for (var p in dataSet) {
-        if (dataSet.hasOwnProperty(p)) {
-          dataList.push(p);
+        // css core
+        var filepath = 'dist/css/uikit.css', cssFiles = [filepath];
+
+        if (!fs.existsSync(filepath)) {
+            grunt.log.error("Not found: " + filepath);
+            return;
         }
-      }
-      */
-      dataList = Object.keys(dataSet);
-      pystring += 'uikit_data = ["' + dataList.join('", "') + '"]\n';
 
-      grunt.file.write('dist/uikit_completions.py', pystring);
-      grunt.log.writeln('Written: dist/uikit_completions.py');
+        // css addons
+        fs.readdirSync('dist/css/addons').forEach(function(f){
+
+            if (f.match(/\.css$/)) {
+                cssFiles.push('dist/css/addons/'+f);
+            }
+        });
+
+        var cssContent = "";
+
+        for (var i in cssFiles) {
+            cssContent += grunt.file.read(cssFiles[i])+' ';
+        }
+
+        var classesList = cssContent.match(/\.(uk-[a-z\d\-]+)/g),
+            classesSet  = {},
+            pystring    = '# copy & paste into sublime plugin code:\n';
+
+        // use object as set (no duplicates)
+        classesList.forEach(function(c) {
+            c = c.substr(1); // remove leading dot
+            classesSet[c] = true;
+        });
+
+        // convert set back to list
+        classesList = Object.keys(classesSet);
+
+        pystring += 'uikit_classes = ' + pythonList(classesList) + '\n';
+
+        // JS core
+        filepath = 'dist/js/uikit.js';
+
+        if (!fs.existsSync(filepath)) {
+            grunt.log.error("Not found: " + filepath);
+            return;
+        }
+
+        var jsFiles = [filepath];
+
+        // JS addons
+        fs.readdirSync('dist/js/addons').forEach(function(f){
+
+            if (f.match(/\.js$/)) {
+                jsFiles.push('dist/js/addons/'+f);
+            }
+        });
+
+        var jsContent = "";
+
+        for (var i in jsFiles) {
+            jsContent += grunt.file.read(jsFiles[i]) + ' ';
+        }
+
+        var dataList = jsContent.match(/data-uk-[a-z\d\-]+/g),
+            dataSet  = {};
+
+        dataList.forEach(function(s) { dataSet[s] = true; });
+        dataList  = Object.keys(dataSet);
+        pystring += 'uikit_data = ' + pythonList(dataList) + '\n';
+
+        grunt.file.write('dist/uikit_completions.py', pystring);
+        grunt.log.writeln('Written: dist/uikit_completions.py');
     });
 
     // Load grunt tasks from NPM packages
@@ -375,5 +390,4 @@ module.exports = function(grunt) {
     grunt.registerTask("build", ["jshint", "indexthemes", "less", "concat", "copy", "uglify", "usebanner"]);
     grunt.registerTask("make-scss", ["copy:scss", "copy:scssthemes", "replace:scss"]);
     grunt.registerTask("default", ["build", "compress"]);
-
 };

@@ -32,16 +32,18 @@
                 var target = $(e.target);
 
                 if (!e.type.match(/swipe/)) {
-                    if (target.hasClass("uk-offcanvas-bar")) return;
-                    if (target.parents(".uk-offcanvas-bar:first").length) return;
+
+                    if (!target.hasClass("uk-offcanvas-close")) {
+                        if (target.hasClass("uk-offcanvas-bar")) return;
+                        if (target.parents(".uk-offcanvas-bar:first").length) return;
+                    }
                 }
 
                 e.stopImmediatePropagation();
-
                 Offcanvas.hide();
             });
 
-            $doc.on('keydown.offcanvas', function(e) {
+            $doc.on('keydown.ukoffcanvas', function(e) {
                 if (e.keyCode === 27) { // ESC
                     Offcanvas.hide();
                 }

@@ -1,14 +1,42 @@
 # Changelog
 
-### WIP
+### 2.5.0 (March 25, 2014)
+
+  - IMPORTANT: Moved search component to add-ons 
+  - IMPORTANT: Removed form-file JavaScript
+  - Added placeholder add-on
+  - Added dotnav add-on
+  - Added slidenav add-on
+  - Added upload add-on
+  - Added autocomplete add-on
+  - Added simple template engine
+  - Added large dialog to modal component
+  - Added overflow container to utility component
+  - Added text vertical alignment modifiers
+  - Form-file add-on now works great with text
+  - Lists are now more robust
+  - Fixed page jumping to top for modal component
+  - Fixed timpicker add-on events
+  - Fixed markdownarea add-on browser reload issue
+  - Fixed fixed breakpoint for grid divider with large gutter
+
+**Documentation and repository**
+
+  - Refactored add-on structure
+  - Added docs and tests for new add-ons
+  - Fixed form password add-on doc
+
+### 2.4.0 (March 05, 2014)
 
   - IMPORTANT: Renamed uk-text-info to uk-text-primary including variable names
   - IMPORTANT: Renamed uk-notify-message-info to uk-notify-message-primary including variable names
   - IMPORTANT: Renamed @grid-large-gutter-horizontal to @grid-gutter-large-horizontal
   - IMPORTANT: Renamed @grid-large-gutter-vertical to @grid-gutter-large-vertical
   - IMPORTANT: Renamed @panel-divider-large-gutter to @panel-divider-gutter-large
+  - IMPORTANT: Removed uk-modal-dialog-slide
   - Renamed some global variables in themes
   - Refactored grid component
+  - Refactored modal component
   - Added grid-match only within rows option
   - Added grid width classes
   - Added grid gutter small classes
@@ -34,6 +62,7 @@
 
 **Documentation and repository**
 
+  - Refactored add-on structure
   - Added layout examples
   - Added placeholder images in docs
   - Added holder.js for placeholder images in tests

@@ -80,7 +80,6 @@
                             <li><a href="thumbnail.html">Thumbnail</a></li>
                             <li><a href="overlay.html">Overlay</a></li>
                             <li><a href="progress.html">Progress</a></li>
-                            <li><a href="search.html">Search</a></li>
                             <li><a href="text.html">Text</a></li>
                             <li><a href="animation.html">Animation</a></li>
 
@@ -683,6 +682,79 @@
 
                             <hr class="uk-article-divider">
 
+                            <h2>Overflow container</h2>
+
+                            <p>To create a container that provides a horizontal scrollbar whenever the elements inside it are wider than the container itself, just add the <code>.uk-overflow-container</code> class to a <code>&lt;div&gt;</code> element. This comes in useful when having to handle tables on a responsive website, which at some point would just get too big.</p>
+
+                            <h3 class="tm-article-subtitle">Example</h3>
+
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-striped uk-table-condensed uk-text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                            <th>Table Heading</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                            <td>Table Footer</td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                            <td>Table Data</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h4 class="tm-article-subtitle">Markup</h4>
+
+<pre><code>&lt;div class="uk-overflow-container"&gt;...&lt;/div&gt;</code></pre>
+
+                            <hr class="uk-article-divider">
+
                             <h2>Display utilities</h2>
 
                             <p>Add one of these classes to change the display properties of an element.</p>
@@ -844,6 +916,7 @@
                             <li><a href="documentation_create-a-theme.html">Create a theme</a></li>
                             <li><a href="documentation_create-a-style.html">Create a style</a></li>
                             <li><a href="documentation_customizer-json.html">Customizer.json</a></li>
+                            <li><a href="documentation_javascript.html">JavaScript</a></li>
                         </ul>
                     </li>
                     <li class="uk-nav-header">Components</li>
@@ -891,7 +964,6 @@
                             <li><a href="thumbnail.html">Thumbnail</a></li>
                             <li><a href="overlay.html">Overlay</a></li>
                             <li><a href="progress.html">Progress</a></li>
-                            <li><a href="search.html">Search</a></li>
                             <li><a href="text.html">Text</a></li>
                             <li><a href="animation.html">Animation</a></li>
                         </ul>
@@ -908,16 +980,31 @@
                             <li><a href="smooth-scroll.html">Smooth scroll</a></li>
                         </ul>
                     </li>
-                    <li class="uk-parent"><a href="#">Add-ons</a>
+                    <li class="uk-nav-header">Add-ons</li>
+                    <li class="uk-parent"><a href="#"><i class="uk-icon-bars"></i> Navigations</a>
                         <ul class="uk-nav-sub">
-                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
-                            <li><a href="addons_sortable.html">Sortable</a></li>
-                            <li><a href="addons_datepicker.html">Datepicker</a></li>
-                            <li><a href="addons_timepicker.html">Timepicker</a></li>
-                            <li><a href="addons_sticky.html">Sticky</a></li>
-                            <li><a href="addons_notify.html">Notify</a></li>
-                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li><a href="addons_dotnav.html">Dotnav</a></li>
+                            <li><a href="addons_slidenav.html">Slidenav</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent"><a href="#"><i class="uk-icon-folder-open"></i> Common</a>
+                        <ul class="uk-nav-sub">
                             <li><a href="addons_form-file.html">Form file</a></li>
+                            <li><a href="addons_form-password.html">Form password</a></li>
+                            <li><a href="addons_placeholder.html">Placeholder</a></li>
+                        </ul>
+                    </li>
+                    <li class="uk-parent"><a href="#"><i class="uk-icon-magic"></i> JavaScript</a>
+                        <ul class="uk-nav-sub">
+                            <li><a href="addons_autocomplete.html">Autocomplete</a></li>
+                            <li><a href="addons_datepicker.html">Datepicker</a></li>
+                            <li><a href="addons_markdownarea.html">Markdown area</a></li>
+                            <li><a href="addons_notify.html">Notify</a></li>
+                            <li><a href="addons_search.html">Search</a></li>
+                            <li><a href="addons_sortable.html">Sortable</a></li>
+                            <li><a href="addons_sticky.html">Sticky</a></li>
+                            <li><a href="addons_timepicker.html">Timepicker</a></li>
+                            <li><a href="addons_upload.html">Upload</a></li>
                         </ul>
                     </li>
                 </ul>

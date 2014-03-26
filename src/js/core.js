@@ -1,18 +1,41 @@
 (function(core) {
 
-     if (typeof define == "function" && define.amd) { // AMD
-         define("uikit", function(){
-             return core(window, window.jQuery, window.document);
-         });
-     }
+    if (typeof define == "function" && define.amd) { // AMD
+        define("uikit", function(){
 
-     if (!window.jQuery) {
-         throw new Error( "UIkit requires jQuery" );
-     }
+            var uikit = core(window, window.jQuery, window.document);
 
-     if (window && window.jQuery) {
-         core(window, window.jQuery, window.document);
-     }
+            uikit.load = function(res, req, onload, config) {
+
+                var resources = res.split(','), load = [], i, base = (config.config && config.config.uikit && config.config.uikit.base ? config.config.uikit.base : "").replace(/\/+$/g, "");
+
+                if (!base) {
+                    throw new Error( "Please define base path to uikit in the requirejs config." );
+                }
+
+                for (i = 0; i < resources.length; i += 1) {
+
+                    var resource = resources[i].replace(/\./g, '/');
+
+                    load.push(base+'/js/addons/'+resource);
+                }
+
+                req(load, function() {
+                    onload(uikit);
+                });
+            };
+
+            return uikit;
+        });
+    }
+
+    if (!window.jQuery) {
+        throw new Error( "UIkit requires jQuery" );
+    }
+
+    if (window && window.jQuery) {
+        core(window, window.jQuery, window.document);
+    }
 
 
 })(function(global, $, doc) {
@@ -25,7 +48,7 @@
         return UI;
     }
 
-    UI.version = '2.3.1';
+    UI.version = '2.5.0';
 
     UI.fn = function(command, options) {
 
@@ -58,14 +81,31 @@
                 }, name;
 
             for (name in transEndEventNames) {
-                if (element.style[name] !== undefined) {
-                    return transEndEventNames[name];
-                }
+                if (element.style[name] !== undefined) return transEndEventNames[name];
             }
-
         }());
 
         return transitionEnd && { end: transitionEnd };
+    })();
+
+    UI.support.animation = (function() {
+
+        var animationEnd = (function() {
+
+            var element = doc.body || doc.documentElement,
+                animEndEventNames = {
+                    WebkitAnimation: 'webkitAnimationEnd',
+                    MozAnimation: 'animationend',
+                    OAnimation: 'oAnimationEnd oanimationend',
+                    animation: 'animationend'
+                }, name;
+
+            for (name in animEndEventNames) {
+                if (element.style[name] !== undefined) return animEndEventNames[name];
+            }
+        }());
+
+        return animationEnd && { end: animationEnd };
     })();
 
     UI.support.requestAnimationFrame = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || global.msRequestAnimationFrame || global.oRequestAnimationFrame || function(callback){ global.setTimeout(callback, 1000/60); };
@@ -153,6 +193,68 @@
         }
 
         return options;
+    };
+
+    UI.Utils.template = function(str, data) {
+
+        var tokens = str.replace(/\n/g, '\\n').replace(/\{\{\{\s*(.+?)\s*\}\}\}/g, "{{!$1}}").split(/(\{\{\s*(.+?)\s*\}\})/g),
+            i=0, toc, cmd, prop, val, fn, output = [], openblocks = 0;
+
+        while(i < tokens.length) {
+
+            toc = tokens[i];
+
+            if(toc.match(/\{\{\s*(.+?)\s*\}\}/)) {
+                i = i + 1;
+                toc  = tokens[i];
+                cmd  = toc[0];
+                prop = toc.substring(toc.match(/^(\^|\#|\!|\~|\:)/) ? 1:0);
+
+                switch(cmd) {
+                    case '~':
+                        output.push("for(var $i=0;$i<"+prop+".length;$i++) { var $item = "+prop+"[$i];");
+                        openblocks++;
+                        break;
+                    case ':':
+                        output.push("for(var $key in "+prop+") { var $val = "+prop+"[$key];");
+                        openblocks++;
+                        break;
+                    case '#':
+                        output.push("if("+prop+") {");
+                        openblocks++;
+                        break;
+                    case '^':
+                        output.push("if(!"+prop+") {");
+                        openblocks++;
+                        break;
+                    case '/':
+                        output.push("}");
+                        openblocks--;
+                        break;
+                    case '!':
+                        output.push("__ret.push("+prop+");");
+                        break;
+                    default:
+                        output.push("__ret.push(escape("+prop+"));");
+                        break;
+                }
+            } else {
+                output.push("__ret.push('"+toc.replace(/\'/g, "\\'")+"');");
+            }
+            i = i + 1;
+        }
+
+        fn  = [
+            'var __ret = [];',
+            'try {',
+            'with($data){', (!openblocks ? output.join('') : '__ret = ["Not all blocks are closed correctly."]'), '};',
+            '}catch(e){__ret = [e.message];}',
+            'return __ret.join("").replace(/\\n\\n/g, "\\n");',
+            "function escape(html) { return String(html).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');}"
+        ].join("\n");
+
+        var func = new Function('$data', fn);
+        return data ? func(data) : func;
     };
 
     UI.Utils.events       = {};

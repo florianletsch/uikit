@@ -6,8 +6,8 @@
 // Sub-objects:     `uk-modal-dialog`
 //                  `uk-modal-close`
 //
-// Modifiers:       `uk-modal-dialog-slide`
-//                  `uk-modal-dialog-frameless`
+// Modifiers:       `uk-modal-dialog-frameless`
+//                  `uk-modal-dialog-large`
 //
 // States:          `uk-open`
 //
@@ -22,9 +22,13 @@
 @modal-z-index:                                 1010;
 @modal-background:                              rgba(0,0,0,0.6);
 
+@modal-dialog-margin-vertical:                  50px;
 @modal-dialog-padding:                          20px;
 @modal-dialog-width:                            600px;
 @modal-dialog-background:                       #fff;
+
+@modal-dialog-large-width:                      930px;
+@modal-dialog-large-width-large:                1130px;
 
 
 // Hooks
@@ -43,10 +47,10 @@
  * This is the modal overlay and modal dialog container
  * 1. Hide by default
  * 2. Set fixed position
- * 3. Webkit needs a height to position the modal dialog vertically in percent
- * 4. Allow scrolling for the modal dialog
- * 5. Mask the background page
- * 6. Fade-in transition
+ * 3. Allow scrolling for the modal dialog
+ * 4. Mask the background page
+ * 5. Fade-in transition
+ * 6. Fix transition in Webkit
  */
 
 .uk-modal {
@@ -60,16 +64,16 @@
     left: 0;
     z-index: @modal-z-index;
     /* 3 */
-    height: 100%;
-    /* 4 */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    /* 5 */
+    /* 4 */
     background: @modal-background;
-    /* 6 */
+    /* 5 */
     opacity: 0;
     -webkit-transition: opacity 0.15s linear;
     transition: opacity 0.15s linear;
+    /* 6 */
+    -webkit-transform: translateZ(0);
     .hook-modal;
 }
 
@@ -80,43 +84,42 @@
 .uk-modal.uk-open { opacity: 1; }
 
 /*
- * 7. Prevents scrolling for the body content
- * 8. Prevents duplicated scrollbar caused by 4.
+ * Prevents duplicated scrollbar caused by 4.
  */
 
 .uk-modal-page,
-.uk-modal-page body {
-    /* 7 */
-    height: 100%;
-    /* 8 */
-    overflow: hidden;
-}
+.uk-modal-page body { overflow: hidden; }
 
 
 /* Sub-object: `uk-modal-dialog`
  ========================================================================== */
 
 /*
- * 1. Set position
+ * 1. Create position context for `uk-modal-dialog-frameless`
  * 2. Set box sizing
- * 3. Center dialog box
- * 4. Style
+ * 3. Set style
+ * 4. Slide-in transition
  */
 
 .uk-modal-dialog {
     /* 1 */
     position: relative;
-    top: 10%;
-    left: 50%;
     /* 2 */
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    margin: @modal-dialog-margin-vertical auto;
     padding: @modal-dialog-padding;
     width: @modal-dialog-width;
+    max-width: 100%;
+    max-width: ~"calc(100% - 20px)";
     /* 3 */
-    margin-left: (@modal-dialog-width / -2);
-    /* 4 */
     background: @modal-dialog-background;
+    /* 4 */
+    opacity: 0;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+    -webkit-transition: opacity 0.3s linear, -webkit-transform 0.3s ease-out;
+    transition: opacity 0.3s linear, transform 0.3s ease-out;
     .hook-modal-dialog;
 }
 
@@ -128,9 +131,6 @@
      */
 
     .uk-modal-dialog {
-        top: 0;
-        left: 0;
-        right: 0;
         width: auto;
         margin: 10px;
     }
@@ -138,32 +138,21 @@
 }
 
 /*
- * Remove margin from the last-child
+ * Open state
  */
 
-.uk-modal-dialog > :last-child { margin-bottom: 0; }
-
-
-/* Modifier: `uk-modal-dialog-slide`
- ========================================================================== */
-
-/*
- * Adds a slide-in transition to the modal dialog
- */
-
-.uk-modal-dialog-slide {
-    opacity: 0;
-    -webkit-transform: translateY(-25%);
-    transform: translateY(-25%);
-    -webkit-transition: opacity 0.3s linear, -webkit-transform 0.3s ease-out;
-    transition: opacity 0.3s linear, transform 0.3s ease-out;
-}
-
-.uk-open .uk-modal-dialog-slide {
+.uk-open .uk-modal-dialog {
+    /* 4 */
     opacity: 1;
     -webkit-transform: translateY(0);
     transform: translateY(0);
 }
+
+/*
+ * Remove margin from the last-child
+ */
+
+.uk-modal-dialog > :last-child { margin-bottom: 0; }
 
 
 /* Close in modal
@@ -210,6 +199,4 @@
 
 
 // Hook
-// ========================================================================
-
 .hook-modal-misc;

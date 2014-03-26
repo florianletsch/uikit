@@ -4,7 +4,6 @@
 
     var active = false,
         html   = $("html"),
-        tpl    = '<div class="uk-modal"><div class="uk-modal-dialog"></div></div>',
 
         Modal  = function(element, options) {
 
@@ -15,6 +14,11 @@
 
             this.transition = UI.support.transition;
             this.dialog     = this.element.find(".uk-modal-dialog");
+
+            this.scrollable = (function(){
+                var scrollable = $this.dialog.find('.uk-overflow-container:first');
+                return scrollable.length ? scrollable : false;
+            })();
 
             this.element.on("click", ".uk-modal-close", function(e) {
                 e.preventDefault();
@@ -33,12 +37,11 @@
 
     $.extend(Modal.prototype, {
 
+        scrollable: false,
         transition: false,
 
         toggle: function() {
-            this[this.isActive() ? "hide" : "show"]();
-
-            return this;
+            return this[this.isActive() ? "hide" : "show"]();
         },
 
         show: function() {
@@ -48,9 +51,9 @@
             if (this.isActive()) return;
             if (active) active.hide(true);
 
-            this.resize();
-
             this.element.removeClass("uk-open").show();
+
+            this.resize();
 
             active = this;
             html.addClass("uk-modal-page").height(); // force browser engine redraw
@@ -81,20 +84,37 @@
         },
 
         resize: function() {
+            
+            var paddingdir = "padding-" + (UI.langdirection == 'left' ? "right":"left");
 
-            this.dialog.css("margin-left", "");
+            this.scrollbarwidth = window.innerWidth - html.width();
+            
+            html.css(paddingdir, this.scrollbarwidth);
 
-            var modalwidth = parseInt(this.dialog.css("width"), 10),
-                inview     = (modalwidth + parseInt(this.dialog.css("margin-left"),10) + parseInt(this.dialog.css("margin-right"),10)) < $win.width();
+            this.element.css(paddingdir, "");
 
-            this.dialog.css("margin-left", modalwidth && inview ? -1*Math.ceil(modalwidth/2) : "");
+            if (this.dialog.offset().left > this.scrollbarwidth) {
+                this.element.css(paddingdir, this.scrollbarwidth);
+            }
+
+            if (this.scrollable) {
+
+                this.scrollable.css("height", 0);
+
+                var offset = Math.abs(parseInt(this.dialog.css("margin-top"), 10)),
+                    dh     = this.dialog.outerHeight(),
+                    wh     = window.innerHeight,
+                    h      = wh - 2*(offset < 20 ? 20:offset) - dh;
+
+                this.scrollable.css("height", h < this.options.minScrollHeight ? "":h);
+            }
         },
 
         _hide: function() {
 
             this.element.hide().removeClass("uk-open");
 
-            html.removeClass("uk-modal-page");
+            html.removeClass("uk-modal-page").css("padding-" + (UI.langdirection == 'left' ? "right":"left"), "");
 
             if(active===this) active = false;
 
@@ -107,11 +127,15 @@
 
     });
 
+    Modal.dialog = {
+        tpl : '<div class="uk-modal"><div class="uk-modal-dialog"></div></div>'
+    };
 
     Modal.defaults = {
         keyboard: true,
         show: false,
-        bgclose: true
+        bgclose: true,
+        minScrollHeight: 150
     };
 
 
@@ -147,7 +171,7 @@
 
     ModalTrigger.dialog = function(content, options) {
 
-        var modal = new Modal($(tpl).appendTo("body"), options);
+        var modal = new Modal($(Modal.dialog.tpl).appendTo("body"), options);
 
         modal.element.on("uk.modal.hide", function(){
             if (modal.persist) {
@@ -165,8 +189,8 @@
     ModalTrigger.alert = function(content, options) {
 
         ModalTrigger.dialog(([
-            '<div class="uk-margin">'+String(content)+'</div>',
-            '<button class="uk-button uk-button-primary uk-modal-close">Ok</button>'
+            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+            '<div class="uk-modal-buttons"><button class="uk-button uk-button-primary uk-modal-close">Ok</button></div>'
         ]).join(""), $.extend({bgclose:false, keyboard:false}, options)).show();
     };
 
@@ -175,8 +199,8 @@
         onconfirm = $.isFunction(onconfirm) ? onconfirm : function(){};
 
         var modal = ModalTrigger.dialog(([
-            '<div class="uk-margin">'+String(content)+'</div>',
-            '<button class="uk-button uk-button-primary js-modal-confirm">Ok</button> <button class="uk-button uk-modal-close">Cancel</button>'
+            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+            '<div class="uk-modal-buttons"><button class="uk-button uk-button-primary js-modal-confirm">Ok</button> <button class="uk-button uk-modal-close">Cancel</button></div>'
         ]).join(""), $.extend({bgclose:false, keyboard:false}, options));
 
         modal.element.find(".js-modal-confirm").on("click", function(){
@@ -193,7 +217,12 @@
 
     // init code
     $(document).on("click.modal.uikit", "[data-uk-modal]", function(e) {
+
         var ele = $(this);
+
+        if(ele.is("a")) {
+            e.preventDefault();
+        }
 
         if (!ele.data("modal")) {
             var modal = new ModalTrigger(ele, UI.Utils.options(ele.attr("data-uk-modal")));
