@@ -108,7 +108,7 @@ module.exports = function(grunt) {
               files: [{ expand: true, src: ["addons/src/**/*.js"], dest: "dist/addons/js", flatten: true }]
             },
             scss: {
-                files: [{ expand: true, cwd: "src/less", src: ["*"], dest: "src/scss/", ext: '.scss' }]
+                files: [{ expand: true, cwd: "src/less", src: ["*.less"], dest: "src/scss/", ext: '.scss' }]
             },
             scssthemes: {
                 files: [{ expand: true, cwd: "themes/default/default", src: ["**.less"], dest: "themes/default/default-scss", ext: '.scss' }]
@@ -140,6 +140,8 @@ module.exports = function(grunt) {
                 }, { // string literals
                     // from: /~"(.*)"/g, to: '#{"$1"}'
                     from: /\$\{/g, to: '#{'
+                }, { // string literals, for real
+                    from: /~("[^"]+")/g, to: 'unquote($1)'
                 }]
             }
         },
